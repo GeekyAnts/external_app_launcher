@@ -31,11 +31,13 @@ class LaunchVpn {
       throw Exception('The package $packageName was not found on the device');
     else {
       return await _channel.invokeMethod('openApp', {'package_name': packageName}).then((value) {
-        if (Platform.isIOS)
-          throw Exception("Redirecting to AppStore as the App is not present on the device");
-        else
-          throw Exception(
-              "Redirecting to Google PlayStore as the App is not present on the device");
+        if (installed == 0) {
+          if (Platform.isIOS)
+            throw Exception("Redirecting to AppStore as the app is not present on the device");
+          else
+            throw Exception(
+                "Redirecting to Google Play Store as the app is not present on the device");
+        }
       });
     }
   }
