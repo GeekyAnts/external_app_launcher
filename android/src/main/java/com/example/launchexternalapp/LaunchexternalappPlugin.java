@@ -13,17 +13,17 @@ import android.text.TextUtils;
 import android.content.pm.PackageManager;
 
 /** LaunchExternalAppPlugin */
-public class LaunchVpnPlugin implements MethodCallHandler {
+public class LaunchexternalappPlugin implements MethodCallHandler {
 
   private final Context context;
 
-  private LaunchVpnPlugin(Context context) {
+  private LaunchexternalappPlugin(Context context) {
     this.context = context;
   }
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "launch_vpn");
-    channel.setMethodCallHandler(new LaunchVpnPlugin(registrar.activeContext()));
+    channel.setMethodCallHandler(new LaunchexternalappPlugin(registrar.activeContext()));
   }
 
   @Override
