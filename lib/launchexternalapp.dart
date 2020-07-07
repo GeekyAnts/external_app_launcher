@@ -11,34 +11,50 @@ class LaunchVpn {
     return version;
   }
 
-  static Future<int> isAppInstalled(String packageName) async {
+  static isAppInstalled(String packageName) async {
     if (packageName.isEmpty) {
       throw Exception('The package name can not be empty');
     }
-    int isAppInstalled =
-        await _channel.invokeMethod('isAppInstalled', {'package_name': packageName});
+    dynamic isAppInstalled = await _channel
+        .invokeMethod('isAppInstalled', {'package_name': packageName});
     return isAppInstalled;
   }
 
-  static Future<int> openApp(String packageName, bool openStore) async {
-    if (packageName.isEmpty) {
-      throw Exception('The package name can not be empty');
+  static Future<int> openApp(
+      {String iosUrlScheme,
+      String androidPackageName,
+      String appStoreLink,
+      bool openStore}) async {
+    String packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
+    String packageVariableName =
+        Platform.isIOS ? 'iosUrlScheme' : 'androidPackageName';
+    if (packageName == null) {
+      throw Exception('The $packageVariableName can not be empty');
     }
-    int installed = await isAppInstalled(packageName);
-    print("----------- $installed");
+    if (Platform.isIOS && appStoreLink == null && openStore != false) {
+      openStore = false;
+    }
 
-    if (installed != 1 && !openStore)
-      throw Exception('The package $packageName was not found on the device');
-    else {
-      return await _channel.invokeMethod('openApp', {'package_name': packageName}).then((value) {
-        if (installed == 0) {
-          if (Platform.isIOS)
-            throw Exception("Redirecting to AppStore as the app is not present on the device");
-          else
-            throw Exception(
+    return await _channel.invokeMethod('openApp', {
+      'package_name': packageName,
+      'open_store': openStore == false ? "false" : null,
+      'app_store_link': appStoreLink
+    }).then((value) {
+      if (value == "app_opened") {
+        print("app opened successfully");
+      } else {
+        if (value == "navigated_to_store") {
+          if (Platform.isIOS) {
+            print(
+                "Redirecting to AppStore as the app is not present on the device");
+          } else
+            print(
                 "Redirecting to Google Play Store as the app is not present on the device");
+        } else {
+          print(value);
         }
-      });
-    }
+      }
+    });
   }
+  // }
 }

@@ -1,14 +1,93 @@
 # launchexternalapp
 
-A new Flutter plugin.
+A Flutter plugin which helps you to open another app from your app
 
 ## Getting Started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+The package ask your for four parameter out of which 2 are madatory.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## For opening apps in android
+
+For opening an external app from your app in android, you need provide packageName of the app.
+
+If the pluggin found the app in the device it will be be opened but if the the app is not installed in the device then it let the user to playstore link of the app.
+
+> But if you don't want to navigate to playstore if app is not installed then make the `openStore` property to `false`.
+
+## For opening apps in ios
+
+In Ios, for opening an external app from your app, you need to provide URLscheme of the target app.
+
+To know more about URLScheme refer to this [Link](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
+
+In your deployment target is greater than or equal to 9 then also need to update external app information in infoPlist.
+
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+    	<string>pulsesecure</string> // url scheme name of the app
+    </array>
+
+But like in Android it will not navifate to store(appStore) if app is not found in the device.
+
+For doing so You need to provide the itunes link of the app.
+
+## Code Illustration
+
+    import 'package:flutter/material.dart';
+    import 'package:launchexternalapp/launchexternalapp.dart';
+
+    void main() {
+    runApp(MyApp());
+    }
+
+    class MyApp extends StatefulWidget {
+    @override
+    _MyAppState createState() => _MyAppState();
+    }
+
+    class _MyAppState extends State<MyApp> {
+    @override
+    void initState() {
+        super.initState();
+    }
+
+    Color containerColor = Colors.red;
+
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+        home: Scaffold(
+            appBar: AppBar(
+            title: const Text('Plugin example app'),
+            ),
+            body: Center(
+            child: Container(
+                height: 50,
+                width: 150,
+                child: RaisedButton(
+                    color: Colors.blue,
+                    onPressed: () async {
+                    await LaunchVpn.openApp(
+                        androidPackageName: 'net.pulsesecure.pulsesecure',
+                        iosUrlScheme: 'pulsesecure://',
+                        appStoreLink:
+                            'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
+                        // openStore: false
+                    );
+                    // Enter thr package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
+                    // The second arguments decide wether the app redirects PlayStore or AppStore.
+                    // For testing purpose you can enter com.instagram.android
+                    },
+                    child: Container(
+                        child: Center(
+                    child: Text(
+                        "Open",
+                        textAlign: TextAlign.center,
+                    ),
+                    ))),
+            ),
+            ),
+        ),
+        );
+    }
+    }

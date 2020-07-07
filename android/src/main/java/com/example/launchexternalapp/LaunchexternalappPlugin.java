@@ -1,6 +1,5 @@
 package com.example.launchexternalapp;
 
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -20,6 +19,7 @@ public class LaunchexternalappPlugin implements MethodCallHandler {
   private LaunchexternalappPlugin(Context context) {
     this.context = context;
   }
+
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "launch_vpn");
@@ -42,7 +42,8 @@ public class LaunchexternalappPlugin implements MethodCallHandler {
         result.error("ERROR", "Empty or null package name", null);
       } else {
         String packageName = call.argument("package_name").toString();
-        result.success(openApp(packageName));
+
+        result.success(openApp(packageName, call.argument("open_store")));
       }
     } else {
       result.notImplemented();
@@ -58,18 +59,22 @@ public class LaunchexternalappPlugin implements MethodCallHandler {
     }
   }
 
-  private int openApp(String packageName) {
-    Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-    if (launchIntent != null) {
-      // null pointer check in case package name was not found
-      context.startActivity(launchIntent);
-      return 1;
+  private String openApp(String packageName, String openStore) {
+    if (isAppInstalled(packageName)) {
+      Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+      if (launchIntent != null) {
+        // null pointer check in case package name was not found
+        context.startActivity(launchIntent);
+        return "app_opened";
+      }
+    } else {
+      if (openStore != "false") {
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        context.startActivity(intent1);
+        return "navigated_to_store";
+      }
     }
-    android.util.Log.d("dewfw","vdsvfsvs");
-    Intent intent1 = new Intent(Intent.ACTION_VIEW);
-    intent1.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id="+packageName));
-    // startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
-    context.startActivity(intent1);
-    return 0;
+
   }
 }
