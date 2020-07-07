@@ -81,7 +81,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.12"
-  launchexternalapp:
+  launch_external_app:
     dependency: "direct main"
     description:
       path: ".."
