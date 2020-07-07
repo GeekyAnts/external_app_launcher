@@ -3,7 +3,7 @@
 # Run `pod lib lint launchexternalapp.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'launchexternalapp'
+  s.name             = 'launch_external_app'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter plugin.'
   s.description      = <<-DESC

@@ -1,4 +1,4 @@
-name: launchexternalapp
+name: launch_external_app
 description: A Flutter plugin which helps you to open another app from your app
 version: 0.0.1
 author: geekyants.com

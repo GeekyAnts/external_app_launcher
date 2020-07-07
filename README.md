@@ -34,7 +34,7 @@ For doing so You need to provide the itunes link of the app.
 ## Code Illustration
 
     import 'package:flutter/material.dart';
-    import 'package:launchexternalapp/launchexternalapp.dart';
+    import 'package:launch_external_app/launchexternalapp.dart';
 
     void main() {
     runApp(MyApp());
