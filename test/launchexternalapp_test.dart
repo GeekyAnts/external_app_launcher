@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await Launchexternalapp.platformVersion, '42');
+    expect(await LaunchVpn.platformVersion, '42');
   });
 }
