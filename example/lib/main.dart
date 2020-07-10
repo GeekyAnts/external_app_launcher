@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:launch_external_app/launchexternalapp.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
             child: RaisedButton(
                 color: Colors.blue,
                 onPressed: () async {
-                  await LaunchVpn.openApp(
+                  await LaunchApp.openApp(
                     androidPackageName: 'net.pulsesecure.pulsesecure',
                     iosUrlScheme: 'pulsesecure://',
                     appStoreLink:

@@ -1,21 +1,21 @@
 PODS:
-  - Flutter (1.0.0)
-  - launch_external_app (0.0.1):
+  - external_app_launcher (0.0.1):
     - Flutter
+  - Flutter (1.0.0)
 
 DEPENDENCIES:
+  - external_app_launcher (from `.symlinks/plugins/external_app_launcher/ios`)
   - Flutter (from `Flutter`)
-  - launch_external_app (from `.symlinks/plugins/launch_external_app/ios`)
 
 EXTERNAL SOURCES:
+  external_app_launcher:
+    :path: ".symlinks/plugins/external_app_launcher/ios"
   Flutter:
     :path: Flutter
-  launch_external_app:
-    :path: ".symlinks/plugins/launch_external_app/ios"
 
 SPEC CHECKSUMS:
+  external_app_launcher: ad55ac844aa21f2d2197d7cec58ff0d0dc40bbc0
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  launch_external_app: aa0245e21ee48df9488605c87c900016d3a9907c
 
 PODFILE CHECKSUM: dcf1f17d57168445a12c9e980270cc38e9983751
 

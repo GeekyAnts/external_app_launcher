@@ -38,24 +38,22 @@ public class LaunchexternalappPlugin implements MethodCallHandler {
         result.success(isAppInstalled(packageName));
       }
     } else if (call.method.equals("openApp")) {
-      if (!call.hasArgument("package_name") || TextUtils.isEmpty(call.argument("package_name").toString())) {
-        result.error("ERROR", "Empty or null package name", null);
-      } else {
-        String packageName = call.argument("package_name").toString();
 
-        result.success(openApp(packageName, call.argument("open_store")));
-      }
+      String packageName = call.argument("package_name");
+
+      result.success(openApp(packageName, call.argument("open_store").toString()));
+
     } else {
       result.notImplemented();
     }
   }
 
-  private int isAppInstalled(String packageName) {
+  private boolean isAppInstalled(String packageName) {
     try {
       context.getPackageManager().getPackageInfo(packageName, 0);
-      return 1;
+      return true;
     } catch (PackageManager.NameNotFoundException ignored) {
-      return 0;
+      return false;
     }
   }
 
@@ -75,6 +73,6 @@ public class LaunchexternalappPlugin implements MethodCallHandler {
         return "navigated_to_store";
       }
     }
-
+    return "something went wrong";
   }
 }
