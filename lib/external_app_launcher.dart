@@ -6,14 +6,14 @@ import 'package:flutter/services.dart';
 class LaunchApp {
   static const MethodChannel _channel = const MethodChannel('launch_vpn');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  static Future<String?> get platformVersion async {
+    final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
   static isAppInstalled(
-      {String iosUrlScheme, String androidPackageName}) async {
-    String packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
+      {String? iosUrlScheme, String? androidPackageName}) async {
+    String packageName = Platform.isIOS ? iosUrlScheme! : androidPackageName!;
     if (packageName.isEmpty) {
       throw Exception('The package name can not be empty');
     }
@@ -23,11 +23,11 @@ class LaunchApp {
   }
 
   static Future<int> openApp(
-      {String iosUrlScheme,
-      String androidPackageName,
-      String appStoreLink,
-      bool openStore}) async {
-    String packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
+      {String? iosUrlScheme,
+      String? androidPackageName,
+      String? appStoreLink,
+      bool? openStore}) async {
+    String? packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
     String packageVariableName =
         Platform.isIOS ? 'iosUrlScheme' : 'androidPackageName';
     if (packageName == null || packageName == "") {
@@ -56,7 +56,7 @@ class LaunchApp {
           print(value);
         }
       }
-    });
+    } as FutureOr<int> Function(dynamic));
   }
   // }
 }

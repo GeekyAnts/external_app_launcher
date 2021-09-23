@@ -29,8 +29,10 @@ class _MyAppState extends State<MyApp> {
           child: Container(
             height: 50,
             width: 150,
-            child: RaisedButton(
-                color: Colors.blue,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
                 onPressed: () async {
                   await LaunchApp.openApp(
                     androidPackageName: 'net.pulsesecure.pulsesecure',
