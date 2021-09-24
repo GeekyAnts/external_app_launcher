@@ -44,6 +44,7 @@ class LaunchApp {
     }).then((value) {
       if (value == "app_opened") {
         print("app opened successfully");
+        return 1;
       } else {
         if (value == "navigated_to_store") {
           if (Platform.isIOS) {
@@ -55,8 +56,9 @@ class LaunchApp {
         } else {
           print(value);
         }
+        return 0;
       }
-    } as FutureOr<int> Function(dynamic));
+    });
   }
   // }
 }
