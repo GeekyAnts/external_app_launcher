@@ -4,13 +4,13 @@ A Flutter plugin which helps you to open another app from your app
 
 ## Getting Started
 
-The package ask your for four parameter out of which 2 are madatory.
+The package asks you for four parameters out of which two are mandatory.
 
 ## For opening apps in android
 
 For opening an external app from your app in android, you need provide packageName of the app.
 
-If the pluggin found the app in the device it will be be opened but if the the app is not installed in the device then it let the user to playstore link of the app.
+If the plugin finds the app in the device, it will be be launched. But if the the app is not installed in the device then it leads the user to playstore link of the app.
 
 > But if you don't want to navigate to playstore if app is not installed then make the `openStore` property to `false`.
 
@@ -33,7 +33,7 @@ For doing so You need to provide the itunes link of the app.
 
 ## Additional Feature
 
-Apart from opening an external app.This Package can also be used to check wheather an app installed in the device or not.
+Apart from opening an external app, this package can also be used to check wheather an app installed in the device or not.
 
 This can done by simply calling following code
 

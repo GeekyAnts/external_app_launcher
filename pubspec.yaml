@@ -1,8 +1,7 @@
 name: external_app_launcher
 description: A Flutter plugin which helps you to open another app from your app
-version: 0.0.1
-author: GeekyAnts Software Pvt Ltd <geekyants.com>
-homepage: https://git.geekyants.com/flutter-pub-packages/launch_external_app
+version: 2.0.0
+homepage: https://geekyants.com/
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
