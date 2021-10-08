@@ -1,6 +1,4 @@
-# launchexternalapp
-
-A Flutter plugin which helps you to open another app from your app
+A Flutter plugin which helps you to open another app from your app.
 
 ## Getting Started
 
@@ -12,39 +10,42 @@ For opening an external app from your app in android, you need provide packageNa
 
 If the plugin finds the app in the device, it will be be launched. But if the the app is not installed in the device then it leads the user to playstore link of the app.
 
-> But if you don't want to navigate to playstore if app is not installed then make the `openStore` property to `false`.
+> But if you don't want to redirect to playstore then set the `openStore` property to `false`.
 
 ## For opening apps in ios
 
-In Ios, for opening an external app from your app, you need to provide URLscheme of the target app.
+In iOS, for opening an external app from your app, you need to provide URLscheme of the target app.
 
 To know more about URLScheme refer to this [Link](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
-In your deployment target is greater than or equal to 9 then also need to update external app information in infoPlist.
+If your deployment target is greater than or equal to 9, then you also need to update external app information in `Info.plist`.
 
     <key>LSApplicationQueriesSchemes</key>
     <array>
-    	<string>pulsesecure</string> // url scheme name of the app
+      <string>pulsesecure</string> // url scheme name of the app
     </array>
 
-But like in Android it will not navifate to store(appStore) if app is not found in the device.
+But unlike in Android, it will not navigate to store (appStore) if app is not found in the device.
 
-For doing so You need to provide the itunes link of the app.
+For doing so you need to provide the iTunes link of the app.
 
 ## Additional Feature
 
-Apart from opening an external app, this package can also be used to check wheather an app installed in the device or not.
+Apart from opening an external app, this package can also be used to check whether an app is installed in the device or not.
 
-This can done by simply calling following code
+This can done by simply calling the function `isAppInstalled`
 
-    await LaunchApp.isAppInstalled(androidPackageName: 'net.pulsesecure.pulsesecure', iosUrlScheme: 'pulsesecure://');
+    await LaunchApp.isAppInstalled(
+      androidPackageName: 'net.pulsesecure.pulsesecure'
+      iosUrlScheme: 'pulsesecure://'
+    );
 
-which retuns true and false based on the fact wheather app is installed or not
+This returns true and false based on the fact whether app is installed or not.
 
 ## Code Illustration
 
     import 'package:flutter/material.dart';
-    import 'package:external_app_launcher/external_app_launcher.    dart';
+    import 'package:external_app_launcher/external_app_launcher.dart';
 
     void main() {
       runApp(MyApp());
@@ -75,23 +76,22 @@ which retuns true and false based on the fact wheather app is installed or not
                 height: 50,
                 width: 150,
                 child: RaisedButton(
-                    color: Colors.blue,
-                    onPressed: () async {
-                      await LaunchApp.openApp(
-                        androidPackageName: 'net.pulsesecure.   pulsesecure',
-                        iosUrlScheme: 'pulsesecure://',
-                        appStoreLink:
-                            'itms-apps://itunes.apple.com/us/   app/pulse-secure/id945832041',
-                        // openStore: false
-                      );
-                      // Enter thr package name of the App you  want to open and for iOS add the     URLscheme to the Info.plist file.
-                      // The second arguments decide wether the     app redirects PlayStore or AppStore.
-                      // For testing purpose you can enter com. instagram.android
-                    },
-                    child: Container(
-                        child: Center(
-                      child: Text(
-                        "Open",
+                  color: Colors.blue,
+                  onPressed: () async {
+                    await LaunchApp.openApp(
+                      androidPackageName: 'net.pulsesecure.pulsesecure',
+                      iosUrlScheme: 'pulsesecure://',
+                      appStoreLink: 'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
+                      // openStore: false
+                    );
+
+                    // Enter the package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
+                    // The `openStore` argument decides whether the app redirects to PlayStore or AppStore.
+                    // For testing purpose you can enter com.instagram.android
+                  },
+                  child: Container(
+                    child: Center(
+                      child: Text("Open",
                         textAlign: TextAlign.center,
                       ),
                     ))),
