@@ -1,5 +1,7 @@
 package com.geekyants.launch_vpn;
 
+import androidx.annotation.NonNull;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -12,17 +14,29 @@ import android.text.TextUtils;
 import android.content.pm.PackageManager;
 
 /** LaunchVpnPlugin */
-public class LaunchVpnPlugin implements MethodCallHandler {
+public class LaunchVpnPlugin implements MethodCallHandler, FlutterPlugin {
 
-  private final Context context;
+  static private MethodChannel channel;
+  static private Context context;
 
   private LaunchVpnPlugin(Context context) {
     this.context = context;
   }
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "launch_vpn");
+    channel = new MethodChannel(registrar.messenger(), "launch_vpn");
     channel.setMethodCallHandler(new LaunchVpnPlugin(registrar.activeContext()));
+  }
+
+  @Override
+  public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {  
+    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "launch_vpn");
+    channel.setMethodCallHandler(new LaunchVpnPlugin(flutterPluginBinding.getApplicationContext()));
+  }
+
+  @Override
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    channel.setMethodCallHandler(null);
   }
 
   @Override
@@ -61,11 +75,13 @@ public class LaunchVpnPlugin implements MethodCallHandler {
     Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
     if (launchIntent != null) {
       // null pointer check in case package name was not found
+      launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       context.startActivity(launchIntent);
       return 1;
     }
      android.util.Log.d("dewfw","vdsvfsvs");
     Intent intent1 = new Intent(Intent.ACTION_VIEW);
+    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     intent1.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id="+packageName));
     // startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
     context.startActivity(intent1);
