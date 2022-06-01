@@ -6,7 +6,7 @@ A Flutter plugin which helps you to open another app from your app. The package 
 
 ## 1. Add package to your project
 
-Complete description to add this package to you project can be found [here](https://pub.dev/packages/external_app_launcher/install).
+Complete description to add this package to your project can be found [here](https://pub.dev/packages/external_app_launcher/install).
 
 ## 2. To setup native performance for the application in order to launch external apps
 
@@ -27,6 +27,7 @@ If the plugin finds the app in the device, it will be be launched. But if the th
 
 ## Demo
 
+<img src="https://user-images.githubusercontent.com/60135944/171337872-81b89d2c-2c8b-4ecf-9702-33788821124c.gif" width="400"/>
 
 ## For opening apps in ios
 
@@ -45,6 +46,8 @@ But unlike in Android, it will not navigate to store (appStore) if app is not fo
 
 For doing so you need to provide the iTunes link of the app.
 ## Demo
+
+<img src="https://user-images.githubusercontent.com/60135944/171337798-bdf3f78d-d002-4353-aab3-8b07dd688916.gif" width="400"/>
 
 ## Implementation
 
