@@ -1,6 +1,6 @@
-# launchexternalapp_example
+# example
 
-Demonstrates how to use the launchexternalapp plugin.
+A new Flutter project.
 
 ## Getting Started
 
