@@ -45,7 +45,8 @@ class _MyAppState extends State<MyApp> {
                             'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
                         // openStore: false
                       );
-                      print('openAppResult => $openAppResult ${openAppResult.runtimeType}');
+                      print(
+                          'openAppResult => $openAppResult ${openAppResult.runtimeType}');
                       // Enter thr package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
                       // The second arguments decide wether the app redirects PlayStore or AppStore.
                       // For testing purpose you can enter com.instagram.android
@@ -56,24 +57,25 @@ class _MyAppState extends State<MyApp> {
                         textAlign: TextAlign.center,
                       ),
                     )),
-                 ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: () async {
-                  var isAppInstalledResult = await LaunchApp.isAppInstalled(
-                    androidPackageName: 'net.pulsesecure.pulsesecure',
-                    iosUrlScheme: 'pulsesecure://',
-                    // openStore: false
-                  );
-                  print('isAppInstalledResult => $isAppInstalledResult ${isAppInstalledResult.runtimeType}');
-                },
-                child: const Center(
-                  child: Text(
-                    "Is app installed?",
-                    textAlign: TextAlign.center,
-                  ),
-                )),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                    ),
+                    onPressed: () async {
+                      var isAppInstalledResult = await LaunchApp.isAppInstalled(
+                        androidPackageName: 'net.pulsesecure.pulsesecure',
+                        iosUrlScheme: 'pulsesecure://',
+                        // openStore: false
+                      );
+                      print(
+                          'isAppInstalledResult => $isAppInstalledResult ${isAppInstalledResult.runtimeType}');
+                    },
+                    child: const Center(
+                      child: Text(
+                        "Is app installed?",
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
               ],
             ),
           ),
