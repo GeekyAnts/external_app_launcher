@@ -1,7 +1,7 @@
-## 2.1.0
+## 3.0.0
 
 * Fix for android permission QUERY_ALL_PACKAGES
-* Fix for returning boolean in isAppInstalled on iOS
+* BREAKING CHANGE: Fix for returning boolean in isAppInstalled on iOS
 
 ## 2.0.2
 
