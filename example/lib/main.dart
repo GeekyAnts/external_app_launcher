@@ -29,30 +29,53 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: SizedBox(
-            height: 50,
+            height: 200,
             width: 150,
-            child: ElevatedButton(
+            child: Column(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                    ),
+                    onPressed: () async {
+                      var openAppResult = await LaunchApp.openApp(
+                        androidPackageName: 'net.pulsesecure.pulsesecure',
+                        iosUrlScheme: 'pulsesecure://',
+                        appStoreLink:
+                            'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
+                        // openStore: false
+                      );
+                      print('openAppResult => $openAppResult ${openAppResult.runtimeType}');
+                      // Enter thr package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
+                      // The second arguments decide wether the app redirects PlayStore or AppStore.
+                      // For testing purpose you can enter com.instagram.android
+                    },
+                    child: const Center(
+                      child: Text(
+                        "Open",
+                        textAlign: TextAlign.center,
+                      ),
+                    )),
+                 ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue,
                 ),
                 onPressed: () async {
-                  await LaunchApp.openApp(
+                  var isAppInstalledResult = await LaunchApp.isAppInstalled(
                     androidPackageName: 'net.pulsesecure.pulsesecure',
                     iosUrlScheme: 'pulsesecure://',
-                    appStoreLink:
-                        'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
                     // openStore: false
                   );
-                  // Enter thr package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
-                  // The second arguments decide wether the app redirects PlayStore or AppStore.
-                  // For testing purpose you can enter com.instagram.android
+                  print('isAppInstalledResult => $isAppInstalledResult ${isAppInstalledResult.runtimeType}');
                 },
                 child: const Center(
                   child: Text(
-                    "Open",
+                    "Is app installed?",
                     textAlign: TextAlign.center,
                   ),
                 )),
+              ],
+            ),
           ),
         ),
       ),
