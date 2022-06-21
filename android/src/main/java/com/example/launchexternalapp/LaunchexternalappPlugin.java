@@ -57,8 +57,12 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
     } else if (call.method.equals("openApp")) {
 
       String packageName = call.argument("package_name");
+      String arguments = call.argument("arguments").toString();
 
-      result.success(openApp(packageName, call.argument("open_store").toString()));
+      if(arguments != null)
+        result.success(openApp(packageName, call.argument("open_store").toString(), arguments));
+      else
+        result.success(openApp(packageName, call.argument("open_store").toString()));
 
     } else {
       result.notImplemented();
@@ -94,4 +98,27 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
     }
     return "something went wrong";
   }
+
+  private String openApp(String packageName, String openStore, String arguments) {
+    if (isAppInstalled(packageName)) {
+      Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+      if (launchIntent != null) {
+        // null pointer check in case package name was not found
+        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        launchIntent.putExtra("arguments", arguments);
+        context.startActivity(launchIntent);
+        return "app_opened";
+      }
+    } else {
+      if (openStore != "false") {
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        context.startActivity(intent1);
+        return "navigated_to_store";
+      }
+    }
+    return "something went wrong";
+  }
+
 }
