@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -26,7 +28,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Container(
+          child: SizedBox(
             height: 50,
             width: 150,
             child: ElevatedButton(
@@ -45,13 +47,12 @@ class _MyAppState extends State<MyApp> {
                   // The second arguments decide wether the app redirects PlayStore or AppStore.
                   // For testing purpose you can enter com.instagram.android
                 },
-                child: Container(
-                    child: Center(
+                child: const Center(
                   child: Text(
                     "Open",
                     textAlign: TextAlign.center,
                   ),
-                ))),
+                )),
           ),
         ),
       ),

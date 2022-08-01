@@ -16,10 +16,10 @@
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
   } else
     if ([@"isAppInstalled" isEqualToString:call.method]) {
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]])
-        result(@(TRUE));
-      else
-        result(@(FALSE));
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]){
+        result(@("True"));
+    } else{
+        result(@("False"));}
     
   } else if ([@"openApp" isEqualToString:call.method]) {
      @try {
