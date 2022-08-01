@@ -17,8 +17,11 @@ For opening an external app from your app in android, you need provide packageNa
 If the plugin finds the app in the device, it will be be launched. But if the the app is not installed in the device then it leads the user to playstore link of the app.
 
 > But if you don't want to redirect to playstore after installation then add the below script to `AndroidManifest.xml` file.
-   
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+     
+     <queries>
+       <package android:name="net.pulsesecure.pulsesecure" /> // your android package name
+     </queries>
+    
     // Above <application> tag
     
     // Inside <intent-filter> add below existing <action> or <category>
