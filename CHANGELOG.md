@@ -1,3 +1,7 @@
+## 3.0.1
+
+* Removed QUERY_ALL_PACKAGES users permission and replaced it with queries in android.
+
 ## 3.0.0
 
 * Fix for android permission QUERY_ALL_PACKAGES
