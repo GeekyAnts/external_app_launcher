@@ -17,9 +17,9 @@
   } else
     if ([@"isAppInstalled" isEqualToString:call.method]) {
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]){
-        result(@("True"));
+        result(@(YES));
     } else{
-        result(@("False"));}
+        result(@(NO));}
     
   } else if ([@"openApp" isEqualToString:call.method]) {
      @try {

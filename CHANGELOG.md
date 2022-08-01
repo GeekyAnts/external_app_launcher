@@ -1,3 +1,8 @@
+## 3.0.0
+
+* Fix for android permission QUERY_ALL_PACKAGES
+* BREAKING CHANGE: Fix for returning boolean in isAppInstalled on iOS
+
 ## 2.0.2
 
 * Added support for android v2 embedding (Thank you [Wilko Thomassen](https://github.com/WilkoThomassen))
