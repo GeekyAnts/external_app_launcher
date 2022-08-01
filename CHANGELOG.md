@@ -1,7 +1,7 @@
+## 3.0.0
 
-## 2.0.3
-
-* Removed QUERY_ALL_PACKAGES users permission and replaced it with queries in android.
+* Fix for android permission QUERY_ALL_PACKAGES
+* BREAKING CHANGE: Fix for returning boolean in isAppInstalled on iOS
 
 ## 2.0.2
 
