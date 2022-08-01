@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.example">
+   <queries>
+       <package android:name="net.pulsesecure.pulsesecure" />
+   </queries>
    <application
         android:label="example"
         android:name="${applicationName}"
