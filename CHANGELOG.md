@@ -1,6 +1,6 @@
-## 3.0.1
+## 3.1.0
 
-* Removed QUERY_ALL_PACKAGES users permission and replaced it with queries in android.
+* Removed QUERY_ALL_PACKAGES users permission in Android. Apps have to use queries in AndroidManifest.xml file.
 
 ## 3.0.0
 
