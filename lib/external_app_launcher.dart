@@ -28,11 +28,13 @@ class LaunchApp {
 
   /// Function to launch the external app
   /// or redirect to store
-  static Future<int> openApp(
-      {String? iosUrlScheme,
-      String? androidPackageName,
-      String? appStoreLink,
-      bool? openStore}) async {
+  static Future<int> openApp({
+    String? iosUrlScheme,
+    String? androidPackageName,
+    String? appStoreLink,
+    bool? openStore,
+    Map<String, dynamic>? data,
+  }) async {
     String? packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
     String packageVariableName =
         Platform.isIOS ? 'iosUrlScheme' : 'androidPackageName';
@@ -46,7 +48,8 @@ class LaunchApp {
     return await _channel.invokeMethod('openApp', {
       'package_name': packageName,
       'open_store': openStore == false ? "false" : "open it",
-      'app_store_link': appStoreLink
+      'app_store_link': appStoreLink,
+      'data': data,
     }).then((value) {
       if (value == "app_opened") {
         print("app opened successfully");
@@ -66,5 +69,4 @@ class LaunchApp {
       }
     });
   }
-  // }
 }

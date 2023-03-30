@@ -13,6 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final TextEditingController _textEditingController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -33,17 +34,28 @@ class _MyAppState extends State<MyApp> {
             width: 150,
             child: Column(
               children: [
+                TextField(
+                  controller: _textEditingController,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter text to pass to launched app',
+                  ),
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Colors.blue,
                     ),
                     onPressed: () async {
+                      Map<String, dynamic> data = {
+                        'text': _textEditingController.text
+                      };
                       var openAppResult = await LaunchApp.openApp(
                         androidPackageName: 'net.pulsesecure.pulsesecure',
                         iosUrlScheme: 'pulsesecure://',
                         appStoreLink:
                             'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
                         // openStore: false
+                        data: data,
                       );
                       print(
                           'openAppResult => $openAppResult ${openAppResult.runtimeType}');
