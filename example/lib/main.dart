@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
                         'text': _textEditingController.text
                       };
                       var openAppResult = await LaunchApp.openApp(
-                        androidPackageName: 'net.pulsesecure.pulsesecure',
+                        androidPackageName: 'com.example.project_add_on_demo',
                         iosUrlScheme: 'pulsesecure://',
                         appStoreLink:
                             'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
