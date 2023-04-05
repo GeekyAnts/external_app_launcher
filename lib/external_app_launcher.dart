@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -28,13 +29,12 @@ class LaunchApp {
 
   /// Function to launch the external app
   /// or redirect to store
-  static Future<int> openApp({
-    String? iosUrlScheme,
-    String? androidPackageName,
-    String? appStoreLink,
-    bool? openStore,
-    Map<String, dynamic>? data,
-  }) async {
+  static Future<int> openApp(
+      {String? iosUrlScheme,
+      String? androidPackageName,
+      String? appStoreLink,
+      bool? openStore,
+      String? data}) async {
     String? packageName = Platform.isIOS ? iosUrlScheme : androidPackageName;
     String packageVariableName =
         Platform.isIOS ? 'iosUrlScheme' : 'androidPackageName';
@@ -49,10 +49,10 @@ class LaunchApp {
       'package_name': packageName,
       'open_store': openStore == false ? "false" : "open it",
       'app_store_link': appStoreLink,
-      'data': data,
+      'data': data
     }).then((value) {
       if (value == "app_opened") {
-        print("app opened successfully");
+        print("App opened successfully");
         return 1;
       } else {
         if (value == "navigated_to_store") {

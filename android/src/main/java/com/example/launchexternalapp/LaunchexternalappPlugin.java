@@ -64,7 +64,7 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
 
       String packageName = call.argument("package_name");
       String openStore = call.argument("open_store").toString();
-      Map<String, String> data = call.argument("data");
+      String data = call.argument("data");
       result.success(openApp(packageName, openStore, data));
     } else {
       result.notImplemented();
@@ -80,28 +80,16 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
     }
   }
 
-private String openApp(String packageName, String openStore, Map<String, String> data) {
+private String openApp(String packageName, String openStore, String data) {
   if (isAppInstalled(packageName)) {
     Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
     if (launchIntent != null) {
       // null pointer check in case package name was not found
       if (data != null) {
-        for (String key : data.keySet()) {
-          launchIntent.putExtra(key, data.get(key));
-          Log.d("Data Passed", key + ": " + data.get(key));
-        }
+          launchIntent.putExtra("data", data);
+          Log.d("Data Passed", data);
       }
       launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-      // Retrieve data passed to the app when it was launched
-      Bundle extras = launchIntent.getExtras();
-      if (extras != null && extras.size() > 0) {
-        for (String key : extras.keySet()) {
-          // Recives the data second app using getString()
-          String value = extras.getString(key);
-          Log.d("Data Received", key + ": " + value);
-        }
-      }
       context.startActivity(launchIntent);
       return "app_opened";
     }

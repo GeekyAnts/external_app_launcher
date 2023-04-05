@@ -46,11 +46,9 @@ class _MyAppState extends State<MyApp> {
                       primary: Colors.blue,
                     ),
                     onPressed: () async {
-                      Map<String, dynamic> data = {
-                        'text': _textEditingController.text
-                      };
+                      String data = _textEditingController.text;
                       var openAppResult = await LaunchApp.openApp(
-                        androidPackageName: 'com.example.project_add_on_demo',
+                        androidPackageName: 'com.example.secondapp',
                         iosUrlScheme: 'pulsesecure://',
                         appStoreLink:
                             'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
