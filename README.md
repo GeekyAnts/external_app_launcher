@@ -124,3 +124,5 @@ This returns true and false based on the fact whether app is installed or not.
         );
       }
     }
+
+## If you want to pass data while launching an external app using this package, you can customize it by following the steps mentioned in the [DOCS](PASS_DATA_ON_LAUNCH.md).
