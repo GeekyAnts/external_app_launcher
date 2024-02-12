@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
               children: [
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () async {
                       var openAppResult = await LaunchApp.openApp(
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
                     )),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () async {
                       var isAppInstalledResult = await LaunchApp.isAppInstalled(

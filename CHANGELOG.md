@@ -1,3 +1,7 @@
+## 4.0.0
+
+* Gradle version is updated.
+
 ## 3.1.0
 
 * Removed QUERY_ALL_PACKAGES users permission in Android. Apps have to use queries in AndroidManifest.xml file.

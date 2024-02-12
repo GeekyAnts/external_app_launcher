@@ -56,9 +56,10 @@ class LaunchApp {
           if (Platform.isIOS) {
             print(
                 "Redirecting to AppStore as the app is not present on the device");
-          } else
+          } else {
             print(
                 "Redirecting to Google Play Store as the app is not present on the device");
+          }
         } else {
           print(value);
         }
