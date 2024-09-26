@@ -25,7 +25,7 @@
     @try {
         NSURL *url = [NSURL URLWithString:call.arguments[@"package_name"]];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] open:url options:@{} completionHandler:^(BOOL success) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
                 if (success) {
                     result(@("app_opened"));
                 } else {
@@ -38,7 +38,7 @@
                 NSLog(@"Is reaching here2 %@", call.arguments[@"app_store_link"]);
                 
                 NSURL *storeUrl = [NSURL URLWithString:call.arguments[@"app_store_link"]];
-                [[UIApplication sharedApplication] open:storeUrl options:@{} completionHandler:^(BOOL success) {
+                [[UIApplication sharedApplication] openURL:storeUrl options:@{} completionHandler:^(BOOL success) {
                     if (success) {
                         result(@("navigated_to_store"));
                     } else {
