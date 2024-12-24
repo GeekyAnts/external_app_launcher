@@ -24,8 +24,14 @@
   } else if ([@"openApp" isEqualToString:call.method]) {
      @try {
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]) {
-           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:call.arguments[@"package_name"]]];
-             result(@("app_opened"));
+//           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:call.arguments[@"package_name"]]];
+            [[UIApplication sharedApplication]
+                    openURL:[NSURL URLWithString:call.arguments[@"package_name"]] options:@{}
+                    completionHandler:^(BOOL success) {
+                        NSLog(@"Open %d",success);
+                    }
+            ];
+            result(@("app_opened"));
         } else
         {
             NSLog(@"Is reaching here1");
@@ -33,6 +39,12 @@
                 NSLog(@"Is reaching here2 %@", call.arguments[@"app_store_link"]);
 
          [[UIApplication sharedApplication] openURL:[NSURL URLWithString:call.arguments[@"app_store_link"]]];
+        [[UIApplication sharedApplication]
+            openURL:[NSURL URLWithString:call.arguments[@"package_name"]] options:@{}
+            completionHandler:^(BOOL success) {
+                NSLog(@"Open %d",success);
+            }
+        ];
             result(@("navigated_to_store"));
             }
             result(@("App not found in the device"));
