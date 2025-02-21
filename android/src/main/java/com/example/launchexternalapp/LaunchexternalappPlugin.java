@@ -6,7 +6,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,31 +15,22 @@ import android.content.pm.PackageManager;
 /** LaunchExternalAppPlugin */
 public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin {
 
-  private static MethodChannel channel;
+  private MethodChannel channel;
   private Context context;
 
-  public LaunchexternalappPlugin() {
-    
-  }
-  private LaunchexternalappPlugin(Context context) {
-    this.context = context;
-  }
-
-  /** Plugin registration. */
-  public static void registerWith(Registrar registrar) {
-    channel = new MethodChannel(registrar.messenger(), "launch_vpn");
-    channel.setMethodCallHandler(new LaunchexternalappPlugin(registrar.activeContext()));
-  }
-
   @Override
-  public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {  
+  public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+    context = flutterPluginBinding.getApplicationContext();
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "launch_vpn");
-    channel.setMethodCallHandler(new LaunchexternalappPlugin(flutterPluginBinding.getApplicationContext()));
+    channel.setMethodCallHandler(this);
   }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-    channel.setMethodCallHandler(null);
+    if (channel != null) {
+      channel.setMethodCallHandler(null);
+      channel = null;
+    }
   }
 
   @Override
@@ -55,11 +45,9 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
         result.success(isAppInstalled(packageName));
       }
     } else if (call.method.equals("openApp")) {
-
       String packageName = call.argument("package_name");
-
-      result.success(openApp(packageName, call.argument("open_store").toString()));
-
+      String openStore = call.argument("open_store").toString();
+      result.success(openApp(packageName, openStore));
     } else {
       result.notImplemented();
     }
@@ -78,13 +66,12 @@ public class LaunchexternalappPlugin implements MethodCallHandler, FlutterPlugin
     if (isAppInstalled(packageName)) {
       Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
       if (launchIntent != null) {
-        // null pointer check in case package name was not found
         launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(launchIntent);
         return "app_opened";
       }
     } else {
-      if (openStore != "false") {
+      if (!"false".equals(openStore)) {
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent1.setData(android.net.Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
