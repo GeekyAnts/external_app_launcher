@@ -1,0 +1,2 @@
+/Users/ruchikagupta/Sites/projects/external_app_launcher/example/android/app/.cxx/Debug/212j256y/x86_64/CMakeFiles/edit_cache.dir
+/Users/ruchikagupta/Sites/projects/external_app_launcher/example/android/app/.cxx/Debug/212j256y/x86_64/CMakeFiles/rebuild_cache.dir
