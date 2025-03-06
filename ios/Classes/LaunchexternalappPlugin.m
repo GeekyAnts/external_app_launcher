@@ -14,40 +14,48 @@
 
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
-  } else
-    if ([@"isAppInstalled" isEqualToString:call.method]) {
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]){
+  } else if ([@"isAppInstalled" isEqualToString:call.method]) {
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]) {
         result(@(YES));
-    } else{
-        result(@(NO));}
+    } else {
+        result(@(NO));
+    }
     
   } else if ([@"openApp" isEqualToString:call.method]) {
-     @try {
-        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:call.arguments[@"package_name"]]]) {
-           [[UIApplication sharedApplication] openURL:[NSURL URLWithString:call.arguments[@"package_name"]]];
-             result(@("app_opened"));
-        } else
-        {
+    @try {
+        NSURL *url = [NSURL URLWithString:call.arguments[@"package_name"]];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
+                if (success) {
+                    result(@("app_opened"));
+                } else {
+                    result(@("Failed to open app"));
+                }
+            }];
+        } else {
             NSLog(@"Is reaching here1");
             if(![@"false" isEqualToString: call.arguments[@"open_store"]]) {
                 NSLog(@"Is reaching here2 %@", call.arguments[@"app_store_link"]);
-
-         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:call.arguments[@"app_store_link"]]];
-            result(@("navigated_to_store"));
+                
+                NSURL *storeUrl = [NSURL URLWithString:call.arguments[@"app_store_link"]];
+                [[UIApplication sharedApplication] openURL:storeUrl options:@{} completionHandler:^(BOOL success) {
+                    if (success) {
+                        result(@("navigated_to_store"));
+                    } else {
+                        result(@("Failed to navigate to store"));
+                    }
+                }];
+            } else {
+                result(@("App not found on the device"));
             }
-            result(@("App not found in the device"));
         }
-         }
-    @catch (NSException * e) {
-      NSLog(@"exception herre");
-      result(e);
-    
+    } @catch (NSException *e) {
+        NSLog(@"exception here");
+        result(e);
     }
   } else {
     result(FlutterMethodNotImplemented);
   }
- 
 }
 
 @end
-
