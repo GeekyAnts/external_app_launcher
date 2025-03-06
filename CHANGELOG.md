@@ -1,5 +1,9 @@
 ## 4.0.2
 
+- Fix: ios 18 launch url issue
+
+## 4.0.2
+
 - Fix: Android build issue
 
 ## 4.0.1
