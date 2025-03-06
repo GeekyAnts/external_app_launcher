@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Fix: Android build issue
+
 ## 4.0.1
 
 - Updated Kotlin version to 2.0.0.
