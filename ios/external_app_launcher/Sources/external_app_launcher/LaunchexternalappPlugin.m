@@ -23,6 +23,7 @@
     
   } else if ([@"openApp" isEqualToString:call.method]) {
     @try {
+        // package_name is a full URL string; it may include ?query for deep-link data.
         NSURL *url = [NSURL URLWithString:call.arguments[@"package_name"]];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
