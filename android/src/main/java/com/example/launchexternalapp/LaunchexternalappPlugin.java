@@ -75,20 +75,27 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
   }
 
   private String openApp(String packageName, String openStore) {
-    if (isAppInstalled(packageName)) {
-      Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-      if (launchIntent != null) {
-        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(launchIntent);
-        return "app_opened";
+    try {
+      if (isAppInstalled(packageName)) {
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (launchIntent != null) {
+          launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          context.startActivity(launchIntent);
+          return "app_opened";
+        } else {
+          return "App is installed but has no launch activity";
+        }
+      } else if (!"false".equals(openStore)) { // Fixed incorrect string comparison
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        context.startActivity(intent1);
+        return "navigated_to_store";
+      } else {
+        return "App is not installed and store redirect is disabled";
       }
-    } else if (!"false".equals(openStore)) { // Fixed incorrect string comparison
-      Intent intent1 = new Intent(Intent.ACTION_VIEW);
-      intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent1.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-      context.startActivity(intent1);
-      return "navigated_to_store";
+    } catch (Exception e) {
+      return "Error launching app: " + e.getMessage();
     }
-    return "something went wrong";
   }
 }
