@@ -86,9 +86,18 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
           return "App is installed but has no launch activity";
         }
       } else if (!"false".equals(openStore)) { // Fixed incorrect string comparison
+        String storeUri;
+        if (isAppInstalled("com.huawei.appmarket") && !isAppInstalled("com.android.vending")) {
+          storeUri = "appmarket://details?id=" + packageName;
+        } else if (isHuaweiDevice() && isAppInstalled("com.huawei.appmarket")) {
+          storeUri = "appmarket://details?id=" + packageName;
+        } else {
+          storeUri = "https://play.google.com/store/apps/details?id=" + packageName;
+        }
+
         Intent intent1 = new Intent(Intent.ACTION_VIEW);
         intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent1.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        intent1.setData(Uri.parse(storeUri));
         context.startActivity(intent1);
         return "navigated_to_store";
       } else {
@@ -97,5 +106,10 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
     } catch (Exception e) {
       return "Error launching app: " + e.getMessage();
     }
+  }
+
+  private boolean isHuaweiDevice() {
+    String manufacturer = android.os.Build.MANUFACTURER;
+    return manufacturer != null && (manufacturer.equalsIgnoreCase("huawei") || manufacturer.equalsIgnoreCase("honor"));
   }
 }
