@@ -38,6 +38,13 @@ In iOS, for opening an external app from your app, you need to provide URLscheme
 
 To know more about URLScheme refer to this [Link](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
+Alternatively, you can launch Safari directly to open a website by calling:
+```dart
+await LaunchApp.openSafari(url: 'https://www.apple.com');
+```
+Or by passing the web URL directly to the `iosUrlScheme` parameter in `openApp`.
+
+
 If your deployment target is greater than or equal to 9, then you also need to update external app information in `Info.plist`.
 
     <key>LSApplicationQueriesSchemes</key>

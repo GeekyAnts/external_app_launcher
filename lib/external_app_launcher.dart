@@ -67,5 +67,9 @@ class LaunchApp {
       }
     });
   }
-  // }
+
+  /// Launches Safari directly on iOS by passing a web URL.
+  static Future<int> openSafari({required String url}) async {
+    return await openApp(iosUrlScheme: url);
+  }
 }
