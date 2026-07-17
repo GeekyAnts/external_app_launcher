@@ -59,6 +59,11 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
         String openStore = call.argument("open_store");
         result.success(openApp(packageName, openStore));
         break;
+      case "openUrlInBrowser":
+        String url = call.argument("url");
+        String browserPackage = call.argument("browser_package");
+        result.success(openUrlInBrowser(url, browserPackage));
+        break;
       default:
         result.notImplemented();
         break;
@@ -111,5 +116,19 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
   private boolean isHuaweiDevice() {
     String manufacturer = android.os.Build.MANUFACTURER;
     return manufacturer != null && (manufacturer.equalsIgnoreCase("huawei") || manufacturer.equalsIgnoreCase("honor"));
+  }
+
+  private String openUrlInBrowser(String url, String browserPackage) {
+    try {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      if (browserPackage != null && !browserPackage.isEmpty() && isAppInstalled(browserPackage)) {
+        intent.setPackage(browserPackage);
+      }
+      context.startActivity(intent);
+      return "url_opened";
+    } catch (Exception e) {
+      return "Error opening URL: " + e.getMessage();
+    }
   }
 }

@@ -44,6 +44,21 @@ await LaunchApp.openSafari(url: 'https://www.apple.com');
 ```
 Or by passing the web URL directly to the `iosUrlScheme` parameter in `openApp`.
 
+To open a URL in **Google Chrome** on both platforms:
+```dart
+await LaunchApp.openUrlInChrome(url: 'https://www.example.com');
+```
+On Android this targets the `com.android.chrome` package. On iOS it converts `https://` → `googlechromes://`.
+
+To target **any specific browser** on Android, or use a custom iOS scheme:
+```dart
+await LaunchApp.openUrlInBrowser(
+  url: 'https://www.example.com',
+  androidBrowserPackage: 'org.mozilla.firefox', // Firefox on Android
+  iosUrlScheme: 'firefox://open-url?url=https://www.example.com', // Firefox on iOS
+);
+```
+If the specified browser is not installed on Android, the system default browser is used as fallback.
 
 If your deployment target is greater than or equal to 9, then you also need to update external app information in `Info.plist`.
 
