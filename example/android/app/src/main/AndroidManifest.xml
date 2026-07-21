@@ -2,6 +2,8 @@
     package="com.example.example">
    <queries>
        <package android:name="net.pulsesecure.pulsesecure" />
+       <package android:name="us.zoom.videomeetings" />
+       <package android:name="com.instagram.android" />
    </queries>
    <application
         android:label="example"
