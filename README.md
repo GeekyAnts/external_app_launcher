@@ -49,9 +49,14 @@ You must add a `<queries>` block **above the `<application>` tag** in your `andr
 
 <img src="https://user-images.githubusercontent.com/60135944/171337872-81b89d2c-2c8b-4ecf-9702-33788821124c.gif" width="400"/>
 
-## For opening apps in ios
+In iOS, for opening an external app from your app, you need to provide the URL scheme of the target app.
 
-In iOS, for opening an external app from your app, you need to provide URLscheme of the target app.
+### ⚠️ iOS Platform Limitation: URL Schemes Required
+
+Due to iOS security sandboxing, it is **impossible** to launch or query external apps using package names/bundle IDs or without a registered custom URL scheme (e.g., `instagram://`). 
+
+* You **must** obtain the target app's custom URL scheme.
+* If your app's deployment target is iOS 9 or above, you **must** also whitelist the scheme in your `Info.plist` under `LSApplicationQueriesSchemes` (see below).
 
 To know more about URLScheme refer to this [Link](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
 
