@@ -44,6 +44,12 @@ You must add a `<queries>` block **above the `<application>` tag** in your `andr
 
 > **Tip:** If you want to query all apps (not recommended for privacy), you can use the `QUERY_ALL_PACKAGES` permission instead, but this requires justification when publishing to the Play Store.
 
+### ⚠️ Android 10+ Background Activity Start Limits
+
+On **Android 10 (API 29) and above**, the OS restricts apps from starting activities from the background (e.g. from background services, background broadcast receivers, or background notifications). Attempting to do so will result in a `SecurityException` being caught and a descriptive error message being returned.
+
+If you need to launch external apps from background states, please review Android's guide on [allowed exceptions for background starts](https://developer.android.com/guide/components/activities/background-starts).
+
 
 ## Demo
 

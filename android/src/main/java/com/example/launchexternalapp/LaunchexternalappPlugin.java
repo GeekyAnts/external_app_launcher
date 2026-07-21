@@ -108,6 +108,8 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
       } else {
         return "App is not installed and store redirect is disabled";
       }
+    } catch (SecurityException e) {
+      return "SecurityException: Background activity start restrictions prevent launching this activity. See https://d.android.com/r/bg-starts";
     } catch (Exception e) {
       return "Error launching app: " + e.getMessage();
     }
@@ -127,6 +129,8 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
       }
       context.startActivity(intent);
       return "url_opened";
+    } catch (SecurityException e) {
+      return "SecurityException: Background activity start restrictions prevent opening this URL. See https://d.android.com/r/bg-starts";
     } catch (Exception e) {
       return "Error opening URL: " + e.getMessage();
     }
