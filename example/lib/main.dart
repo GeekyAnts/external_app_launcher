@@ -145,14 +145,16 @@ class _HomePageState extends State<HomePage> {
         if (code == 1) {
           _showSnack('Opened "${t.label}" successfully.');
         } else {
-          _showSnack('Did not open the app (not installed, store opened, or blocked).');
+          _showSnack(
+              'Did not open the app (not installed, store opened, or blocked).');
         }
       } catch (e) {
         _showSnack('$e', error: true);
       }
     } else {
       // Android: if the target is a plain https URL, open it in the chosen browser.
-      final isHttp = t.iosUrlScheme.startsWith('http://') || t.iosUrlScheme.startsWith('https://');
+      final isHttp = t.iosUrlScheme.startsWith('http://') ||
+          t.iosUrlScheme.startsWith('https://');
       if (isHttp) {
         try {
           final code = await LaunchApp.openUrlInBrowser(
@@ -184,7 +186,8 @@ class _HomePageState extends State<HomePage> {
           if (code == 1) {
             _showSnack('Opened "${t.label}" successfully.');
           } else {
-            _showSnack('Did not open the app (not installed, store opened, or blocked).');
+            _showSnack(
+                'Did not open the app (not installed, store opened, or blocked).');
           }
         } catch (e) {
           _showSnack('$e', error: true);
