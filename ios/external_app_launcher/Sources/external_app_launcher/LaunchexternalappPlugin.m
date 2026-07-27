@@ -47,7 +47,6 @@
             }
         }
     } @catch (NSException *e) {
-        NSLog(@"exception here");
         result(e);
     }
   } else {
