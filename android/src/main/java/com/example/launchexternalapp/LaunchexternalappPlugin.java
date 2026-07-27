@@ -123,6 +123,9 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
   private String openUrlInBrowser(String url, String browserPackage) {
     try {
       Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      // Ensure the intent is recognisable by browsers
+      intent.addCategory(Intent.CATEGORY_BROWSABLE);
+      intent.addCategory(Intent.CATEGORY_DEFAULT);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       if (browserPackage != null && !browserPackage.isEmpty() && isAppInstalled(browserPackage)) {
         intent.setPackage(browserPackage);
