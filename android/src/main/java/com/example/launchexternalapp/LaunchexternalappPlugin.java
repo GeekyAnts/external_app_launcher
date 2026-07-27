@@ -83,6 +83,12 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
     try {
       if (isAppInstalled(packageName)) {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (launchIntent == null) {
+          launchIntent = new Intent(Intent.ACTION_MAIN);
+          launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+          launchIntent.setPackage(packageName);
+          launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         if (launchIntent != null) {
           launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
           context.startActivity(launchIntent);
@@ -90,7 +96,7 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
         } else {
           return "App is installed but has no launch activity";
         }
-      } else if (!"false".equals(openStore)) { // Fixed incorrect string comparison
+      } else if (openStore != null && !"false".equals(openStore) && !openStore.trim().isEmpty()) {
         String storeUri;
         if (isAppInstalled("com.huawei.appmarket") && !isAppInstalled("com.android.vending")) {
           storeUri = "appmarket://details?id=" + packageName;
