@@ -342,12 +342,6 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 20),
           FilledButton.icon(
             onPressed: _openApp,
-            // onPressed: () async {
-            //   await LaunchApp.openUrlInBrowser(
-            //     url: "https://www.google.com",
-            //     androidBrowserPackage: 'org.mozilla.firefox',
-            //   );
-            // },
             icon: const Icon(Icons.open_in_new),
             label: const Text('Open'),
           ),

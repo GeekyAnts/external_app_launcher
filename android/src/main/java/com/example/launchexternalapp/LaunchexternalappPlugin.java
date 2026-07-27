@@ -127,11 +127,24 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
       intent.addCategory(Intent.CATEGORY_BROWSABLE);
       intent.addCategory(Intent.CATEGORY_DEFAULT);
       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      if (browserPackage != null && !browserPackage.isEmpty() && isAppInstalled(browserPackage)) {
+      if (browserPackage != null && !browserPackage.isEmpty()) {
+        // Attempt to launch with the specified browser package.
         intent.setPackage(browserPackage);
       }
       context.startActivity(intent);
       return "url_opened";
+    } catch (android.content.ActivityNotFoundException e) {
+      // Specified browser not found or cannot handle the URL. Fallback to default.
+      try {
+        Intent fallback = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        fallback.addCategory(Intent.CATEGORY_BROWSABLE);
+        fallback.addCategory(Intent.CATEGORY_DEFAULT);
+        fallback.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(fallback);
+        return "url_opened_fallback";
+      } catch (Exception ex) {
+        return "Error opening URL with fallback: " + ex.getMessage();
+      }
     } catch (SecurityException e) {
       return "SecurityException: Background activity start restrictions prevent opening this URL. See https://d.android.com/r/bg-starts";
     } catch (Exception e) {
