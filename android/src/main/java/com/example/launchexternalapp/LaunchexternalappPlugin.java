@@ -59,6 +59,11 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
         String openStore = call.argument("open_store");
         result.success(openApp(packageName, openStore));
         break;
+      case "openUrlInBrowser":
+        String url = call.argument("url");
+        String browserPackage = call.argument("browser_package");
+        result.success(openUrlInBrowser(url, browserPackage));
+        break;
       default:
         result.notImplemented();
         break;
@@ -75,20 +80,81 @@ public class LaunchexternalappPlugin implements FlutterPlugin, MethodCallHandler
   }
 
   private String openApp(String packageName, String openStore) {
-    if (isAppInstalled(packageName)) {
-      Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-      if (launchIntent != null) {
-        launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(launchIntent);
-        return "app_opened";
+    try {
+      if (isAppInstalled(packageName)) {
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (launchIntent == null) {
+          launchIntent = new Intent(Intent.ACTION_MAIN);
+          launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+          launchIntent.setPackage(packageName);
+          launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        if (launchIntent != null) {
+          launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          context.startActivity(launchIntent);
+          return "app_opened";
+        } else {
+          return "App is installed but has no launch activity";
+        }
+      } else if (openStore != null && !"false".equals(openStore) && !openStore.trim().isEmpty()) {
+        String storeUri;
+        if (isAppInstalled("com.huawei.appmarket") && !isAppInstalled("com.android.vending")) {
+          storeUri = "appmarket://details?id=" + packageName;
+        } else if (isHuaweiDevice() && isAppInstalled("com.huawei.appmarket")) {
+          storeUri = "appmarket://details?id=" + packageName;
+        } else {
+          storeUri = "https://play.google.com/store/apps/details?id=" + packageName;
+        }
+
+        Intent intent1 = new Intent(Intent.ACTION_VIEW);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent1.setData(Uri.parse(storeUri));
+        context.startActivity(intent1);
+        return "navigated_to_store";
+      } else {
+        return "App is not installed and store redirect is disabled";
       }
-    } else if (!"false".equals(openStore)) { // Fixed incorrect string comparison
-      Intent intent1 = new Intent(Intent.ACTION_VIEW);
-      intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      intent1.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-      context.startActivity(intent1);
-      return "navigated_to_store";
+    } catch (SecurityException e) {
+      return "SecurityException: Background activity start restrictions prevent launching this activity. See https://d.android.com/r/bg-starts";
+    } catch (Exception e) {
+      return "Error launching app: " + e.getMessage();
     }
-    return "something went wrong";
+  }
+
+  private boolean isHuaweiDevice() {
+    String manufacturer = android.os.Build.MANUFACTURER;
+    return manufacturer != null && (manufacturer.equalsIgnoreCase("huawei") || manufacturer.equalsIgnoreCase("honor"));
+  }
+
+  private String openUrlInBrowser(String url, String browserPackage) {
+    try {
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+      // Ensure the intent is recognisable by browsers
+      intent.addCategory(Intent.CATEGORY_BROWSABLE);
+      intent.addCategory(Intent.CATEGORY_DEFAULT);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      if (browserPackage != null && !browserPackage.isEmpty()) {
+        // Attempt to launch with the specified browser package.
+        intent.setPackage(browserPackage);
+      }
+      context.startActivity(intent);
+      return "url_opened";
+    } catch (android.content.ActivityNotFoundException e) {
+      // Specified browser not found or cannot handle the URL. Fallback to default.
+      try {
+        Intent fallback = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        fallback.addCategory(Intent.CATEGORY_BROWSABLE);
+        fallback.addCategory(Intent.CATEGORY_DEFAULT);
+        fallback.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(fallback);
+        return "url_opened_fallback";
+      } catch (Exception ex) {
+        return "Error opening URL with fallback: " + ex.getMessage();
+      }
+    } catch (SecurityException e) {
+      return "SecurityException: Background activity start restrictions prevent opening this URL. See https://d.android.com/r/bg-starts";
+    } catch (Exception e) {
+      return "Error opening URL: " + e.getMessage();
+    }
   }
 }

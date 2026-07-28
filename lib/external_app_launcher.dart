@@ -67,5 +67,47 @@ class LaunchApp {
       }
     });
   }
-  // }
+
+  /// Launches Safari directly on iOS by passing a web URL.
+  static Future<int> openSafari({required String url}) async {
+    return await openApp(iosUrlScheme: url);
+  }
+
+  /// Opens a [url] in a specific browser on Android.
+  ///
+  /// On Android, pass a [browserPackage] such as `'com.android.chrome'`. If the
+  /// specified browser is not installed, the system default browser is used.
+  ///
+  /// On iOS, pass a browser-specific URL scheme via [iosUrlScheme], e.g.
+  /// `googlechrome://` to open Chrome or `googlechromes://example.com`.
+  static Future<int> openUrlInBrowser({
+    required String url,
+    String androidBrowserPackage = '',
+    String? iosUrlScheme,
+  }) async {
+    if (Platform.isIOS) {
+      final scheme = iosUrlScheme ?? url;
+      return await openApp(iosUrlScheme: scheme);
+    }
+    final result = await _channel.invokeMethod<String>('openUrlInBrowser', {
+      'url': url,
+      'browser_package': androidBrowserPackage,
+    });
+    return result == 'url_opened' ? 1 : 0;
+  }
+
+  /// Opens a [url] in Google Chrome.
+  ///
+  /// On Android, targets `com.android.chrome`. Falls back to system default if
+  /// Chrome is not installed.
+  /// On iOS, uses the `googlechromes://` URL scheme.
+  static Future<int> openUrlInChrome({required String url}) async {
+    final iosScheme =
+        url.replaceFirst(RegExp(r'^https?://'), 'googlechromes://');
+    return await openUrlInBrowser(
+      url: url,
+      androidBrowserPackage: 'com.android.chrome',
+      iosUrlScheme: iosScheme,
+    );
+  }
 }

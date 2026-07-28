@@ -14,29 +14,79 @@ Complete description to add this package to your project can be found [here](htt
 
 For opening an external app from your app in android, you need provide packageName of the app.
 
-If the plugin finds the app in the device, it will be be launched. But if the the app is not installed in the device then it leads the user to playstore link of the app.
+If the plugin finds the app in the device, it will be launched. But if the app is not installed in the device then it leads the user to playstore link of the app.
 
-> But if you don't want to redirect to playstore after installation then add the below script to `AndroidManifest.xml` file.
-     
-     <queries>
-       <package android:name="net.pulsesecure.pulsesecure" /> // your android package name
-     </queries>
-    
-    // Above <application> tag
-    
-    // Inside <intent-filter> add below existing <action> or <category>
-    <category android:name="android.intent.category.HOME"/> 
-    <category android:name="android.intent.category.DEFAULT"/>
+### ⚠️ Android 11+ Package Visibility (Required)
+
+On **Android 11 (API 30) and above**, the OS restricts which packages your app can query. If you do not declare the target package in your `AndroidManifest.xml`, both `isAppInstalled()` and `openApp()` will silently behave as if the app is not installed — **even if it is**.
+
+You must add a `<queries>` block **above the `<application>` tag** in your `android/app/src/main/AndroidManifest.xml` for every package you want to interact with:
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <queries>
+        <!-- Declare every package you want to check or launch -->
+        <package android:name="net.pulsesecure.pulsesecure" />
+        <package android:name="us.zoom.videomeetings" />
+        <package android:name="com.instagram.android" />
+        <!-- Add more packages as needed -->
+    </queries>
+
+    <application ...>
+        ...
+    </application>
+
+</manifest>
+```
+
+> **Note:** Without this declaration, `isAppInstalled('us.zoom.videomeetings')` will always return `false` on Android 11+ even if Zoom is installed.
+
+> **Tip:** If you want to query all apps (not recommended for privacy), you can use the `QUERY_ALL_PACKAGES` permission instead, but this requires justification when publishing to the Play Store.
+
+### ⚠️ Android 10+ Background Activity Start Limits
+
+On **Android 10 (API 29) and above**, the OS restricts apps from starting activities from the background (e.g. from background services, background broadcast receivers, or background notifications). Attempting to do so will result in a `SecurityException` being caught and a descriptive error message being returned.
+
+If you need to launch external apps from background states, please review Android's guide on [allowed exceptions for background starts](https://developer.android.com/guide/components/activities/background-starts).
+
 
 ## Demo
 
 <img src="https://user-images.githubusercontent.com/60135944/171337872-81b89d2c-2c8b-4ecf-9702-33788821124c.gif" width="400"/>
 
-## For opening apps in ios
+In iOS, for opening an external app from your app, you need to provide the URL scheme of the target app.
 
-In iOS, for opening an external app from your app, you need to provide URLscheme of the target app.
+### ⚠️ iOS Platform Limitation: URL Schemes Required
+
+Due to iOS security sandboxing, it is **impossible** to launch or query external apps using package names/bundle IDs or without a registered custom URL scheme (e.g., `instagram://`). 
+
+* You **must** obtain the target app's custom URL scheme.
+* If your app's deployment target is iOS 9 or above, you **must** also whitelist the scheme in your `Info.plist` under `LSApplicationQueriesSchemes` (see below).
 
 To know more about URLScheme refer to this [Link](https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app)
+
+Alternatively, you can launch Safari directly to open a website by calling:
+```dart
+await LaunchApp.openSafari(url: 'https://www.apple.com');
+```
+Or by passing the web URL directly to the `iosUrlScheme` parameter in `openApp`.
+
+To open a URL in **Google Chrome** on both platforms:
+```dart
+await LaunchApp.openUrlInChrome(url: 'https://www.example.com');
+```
+On Android this targets the `com.android.chrome` package. On iOS it converts `https://` → `googlechromes://`.
+
+To target **any specific browser** on Android, or use a custom iOS scheme:
+```dart
+await LaunchApp.openUrlInBrowser(
+  url: 'https://www.example.com',
+  androidBrowserPackage: 'org.mozilla.firefox', // Firefox on Android
+  iosUrlScheme: 'firefox://open-url?url=https://www.example.com', // Firefox on iOS
+);
+```
+If the specified browser is not installed on Android, the system default browser is used as fallback.
 
 If your deployment target is greater than or equal to 9, then you also need to update external app information in `Info.plist`.
 

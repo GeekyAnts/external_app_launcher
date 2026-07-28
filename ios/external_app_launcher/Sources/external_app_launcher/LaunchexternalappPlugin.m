@@ -33,10 +33,7 @@
                 }
             }];
         } else {
-            NSLog(@"Is reaching here1");
             if(![@"false" isEqualToString: call.arguments[@"open_store"]]) {
-                NSLog(@"Is reaching here2 %@", call.arguments[@"app_store_link"]);
-                
                 NSURL *storeUrl = [NSURL URLWithString:call.arguments[@"app_store_link"]];
                 [[UIApplication sharedApplication] openURL:storeUrl options:@{} completionHandler:^(BOOL success) {
                     if (success) {
@@ -50,7 +47,6 @@
             }
         }
     } @catch (NSException *e) {
-        NSLog(@"exception here");
         result(e);
     }
   } else {

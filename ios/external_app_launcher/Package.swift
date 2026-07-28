@@ -4,16 +4,20 @@ import PackageDescription
 let package = Package(
     name: "external_app_launcher",
     platforms:[
-        .iOS("12.0")
+        .iOS("13.0")
     ],
     products:[
         .library(name: "external-app-launcher", targets: ["external_app_launcher"])
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework")
+    ],
     targets:[
         .target(
             name: "external_app_launcher",
-            dependencies: [],
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework")
+            ],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include")

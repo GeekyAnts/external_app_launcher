@@ -5,3 +5,8 @@
 .pub/
 
 build/
+ios/external_app_launcher/.build/
+android/.gradle/
+android/app/build/
+android/build/
+.build/

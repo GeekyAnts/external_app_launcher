@@ -128,34 +128,71 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _openApp() async {
     final t = _effectiveTarget();
-    final schemeOrPackage =
-        Platform.isIOS ? t.iosUrlScheme : t.androidPackageName;
-    if (schemeOrPackage.isEmpty) {
-      _showSnack(
-        Platform.isIOS
-            ? 'Enter an iOS URL or https link.'
-            : 'Enter an Android package name.',
-        error: true,
-      );
-      return;
-    }
-    try {
-      final code = await LaunchApp.openApp(
-        iosUrlScheme: t.iosUrlScheme,
-        androidPackageName: t.androidPackageName,
-        appStoreLink: t.appStoreLink,
-      );
-      if (!mounted) return;
-      // Plugin contract: 1 == native "app_opened", 0 covers store redirect / failure.
-      if (code == 1) {
-        _showSnack('Opened "${t.label}" successfully.');
-      } else {
-        _showSnack(
-          'Did not open the app (not installed, store opened, or blocked).',
-        );
+    // Determine what to launch based on platform and target type.
+    if (Platform.isIOS) {
+      // iOS always uses URL scheme via openApp.
+      if (t.iosUrlScheme.isEmpty) {
+        _showSnack('Enter an iOS URL or https link.', error: true);
+        return;
       }
-    } catch (e) {
-      _showSnack('$e', error: true);
+      try {
+        final code = await LaunchApp.openApp(
+          iosUrlScheme: t.iosUrlScheme,
+          androidPackageName: t.androidPackageName,
+          appStoreLink: t.appStoreLink,
+        );
+        if (!mounted) return;
+        if (code == 1) {
+          _showSnack('Opened "${t.label}" successfully.');
+        } else {
+          _showSnack(
+              'Did not open the app (not installed, store opened, or blocked).');
+        }
+      } catch (e) {
+        _showSnack('$e', error: true);
+      }
+    } else {
+      // Android: if the target is a plain https URL, open it in the chosen browser.
+      final isHttp = t.iosUrlScheme.startsWith('http://') ||
+          t.iosUrlScheme.startsWith('https://');
+      if (isHttp) {
+        try {
+          final code = await LaunchApp.openUrlInBrowser(
+            url: t.iosUrlScheme,
+            androidBrowserPackage: t.androidPackageName,
+          );
+          if (!mounted) return;
+          if (code == 1) {
+            _showSnack('Opened "${t.label}" successfully.');
+          } else {
+            _showSnack('Failed to open URL in browser.');
+          }
+        } catch (e) {
+          _showSnack('$e', error: true);
+        }
+      } else {
+        // Fallback to original behaviour for package name based launch.
+        if (t.androidPackageName.isEmpty) {
+          _showSnack('Enter an Android package name.', error: true);
+          return;
+        }
+        try {
+          final code = await LaunchApp.openApp(
+            iosUrlScheme: t.iosUrlScheme,
+            androidPackageName: t.androidPackageName,
+            appStoreLink: t.appStoreLink,
+          );
+          if (!mounted) return;
+          if (code == 1) {
+            _showSnack('Opened "${t.label}" successfully.');
+          } else {
+            _showSnack(
+                'Did not open the app (not installed, store opened, or blocked).');
+          }
+        } catch (e) {
+          _showSnack('$e', error: true);
+        }
+      }
     }
   }
 
